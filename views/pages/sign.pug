@@ -1,0 +1,18 @@
+extends ../layout
+block content
+  .grid-flex-container
+    .grid-flex-cell
+      - if (errors && errors.page)
+        .message.message-error #{errors.page}
+      form(method='post')
+        input(type='hidden' name='crumb' value=crumb)
+        input(type='hidden' name='proof' value=proof)
+        fieldset
+          legend Sign session
+          .form-element
+            label(for='password') Password
+            input(type='password' id='password' class='form-input' name='password')
+            - if (errors && errors.password)
+              .message.message-error #{errors.password}
+          .form-element
+            button(type='submit' class='button button-primary') Sign

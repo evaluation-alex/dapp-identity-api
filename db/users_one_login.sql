@@ -1,0 +1,11 @@
+SELECT
+  users.id,
+  users.name,
+  users.email,
+  users.hash,
+  users.last_login,
+  users.scope
+FROM
+  users
+WHERE
+  users.email=${email}

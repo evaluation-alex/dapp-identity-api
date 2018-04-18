@@ -1,0 +1,23 @@
+extends ../layout
+block content
+  .grid-flex-container
+    .grid-flex-cell
+      - if (errors && errors.page)
+        .message.message-error #{errors.page}
+      form(method='post')
+        input(type='hidden' name='crumb' value=crumb)
+        fieldset
+          legend Log in
+          .form-element
+            label(for='email') Email
+            input(type='text' id='email' class='form-input' name='email' value=email)
+            - if (errors && errors.email)
+              .message.message-error #{errors.email}
+          .form-element
+            label(for='password') Password
+            input(type='password' id='password' class='form-input' name='password')
+            - if (errors && errors.password)
+              .message.message-error #{errors.password}
+          .form-element
+            button(type='submit' class='button button-primary') Sign In
+            a(href='/') Don't have an account yet?

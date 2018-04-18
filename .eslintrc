@@ -1,0 +1,12 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 8,
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true
+    }
+  },
+  "rules": {
+    'indent': ["error", 2, { "SwitchCase": 1 }],
+  },
+  "extends": "hapi"
+}

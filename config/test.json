@@ -1,0 +1,5 @@
+{
+  "pino": {
+    "level": "silent"
+  }
+}

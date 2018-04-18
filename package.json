@@ -1,0 +1,53 @@
+{
+  "name": "dapp_identity_api",
+  "version": "0.0.0",
+  "description": "Identity API for IPFS DApps",
+  "main": "server.js",
+  "engines": {
+    "node": ">=8.0.0",
+    "npm": ">=5.0.0"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "test": "lab -a code -L -v -e test -I '__core-js_shared__,__extends,__assign,__rest,__decorate,__param,__metadata,__awaiter,__generator,__exportStar,__values,__read,__spread,__await,__asyncGenerator,__asyncDelegator,__asyncValues,__makeTemplateObject,__importStar,__importDefault,btoa,atob'",
+    "validate": "npm ls",
+    "migrate": "knex migrate:latest",
+    "createdb": "psql -d postgres -c \"CREATE ROLE $(node -pe 'require(\"getconfig\").db.connection.user') WITH PASSWORD '$(node -pe 'require(\"getconfig\").db.connection.password')' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN\" && createdb $(node -pe 'require(\"getconfig\").db.connection.database') -O $(node -pe 'require(\"getconfig\").db.connection.user')",
+    "sqlextensions": "psql -d $(node -pe 'require(\"getconfig\").db.connection.database') -c 'CREATE EXTENSION pgcrypto; CREATE EXTENSION citext; CREATE EXTENSION \"uuid-ossp\"'"
+  },
+  "keywords": [],
+  "author": "Gar <gar+npm@danger.computer>",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^2.0.0",
+    "boom": "^7.2.0",
+    "bs58": "^4.0.1",
+    "crumb": "^7.0.0",
+    "getconfig": "^4.4.1",
+    "hapi": "^17.3.1",
+    "hapi-auth-cookie": "^8.1.0",
+    "hapi-pino": "^4.0.4",
+    "hoek": "^5.0.3",
+    "inert": "^5.1.0",
+    "keyfob": "^1.0.0",
+    "knex": "^0.14.6",
+    "muckraker": "^4.0.1",
+    "node-webcrypto-ossl": "^1.0.36",
+    "pino-noir": "^2.2.1",
+    "pug": "^2.0.3",
+    "vision": "^5.3.2"
+  },
+  "devDependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "code": "^5.2.0",
+    "eslint": "^4.19.1",
+    "eslint-plugin-hapi": "^4.1.0",
+    "faker": "^4.1.0",
+    "lab": "^15.4.1"
+  },
+  "pre-commit": [
+    "lint",
+    "validate",
+    "test"
+  ]
+}

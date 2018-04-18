@@ -1,0 +1,38 @@
+{
+  "baseURL": "localhost:8001",
+  "db": {
+    "client": "pg",
+    "connection": {
+      "user": "protocollabs",
+      "password": "password",
+      "database": "ipfs_dapp_api"
+    }
+  },
+  "auth": {
+    "password": "this_is_a_really_bad_secret_and_should_be_replaced",
+    "keepAlive": true,
+    "ttl": 2629746000,
+    "isSameSite": "Lax",
+    "cookie": "swrtcpro-sid",
+    "redirectTo": "/login",
+    "redirectOnTry": false,
+    "isSecure": false
+  },
+  "hapi": {
+    "host": "0.0.0.0",
+    "port": 8001,
+    "routes": {
+      "security": true,
+      "cors": true
+    }
+  },
+  "pino": {
+    "prettyPrint": true,
+    "ignorePaths": ["/__healthcheck__"]
+  },
+  "crumb": {
+    "cookieOptions": {
+      "isSecure": false
+    }
+  }
+}

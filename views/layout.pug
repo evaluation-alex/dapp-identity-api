@@ -1,0 +1,35 @@
+doctype html
+html(lang='en')
+  head
+    link(rel='stylesheet' href='/css/andlight.css')
+    link(rel='stylesheet' href='/css/main.min.css')
+    style(type='text/css').
+      .form-input {
+        border: 1px solid #00b0e9;
+      }
+      .content {
+        max-width: 1280px;
+      }
+      .nav-container {
+        max-width: 1280px;
+        margin: auto;
+      }
+    block script
+  body
+    h1
+      a(href='/') DAPP Identity Server
+    nav.top-nav.top-nav-light.cf(role='navigation')
+      input#menu-toggle.menu-toggle(type='checkbox')
+      label(for='menu-toggle') Menu
+      ul.list-unstyled.list-inline.cf.pull-right
+        if (authenticated_user && authenticated_user.name)
+          li #{authenticated_user.name}
+          li
+            form(action='/logout' method='post')
+              input(type='hidden' name='crumb' value=crumb)
+              input(type='submit' value='Log out')
+        else if (!authenticated_user)
+          li
+            a(href='/login') Log in
+    div(class='container content')
+      block content
