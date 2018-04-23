@@ -4,6 +4,7 @@
  * Static rendering of unauthenticated pages here
  */
 const Joi = require('joi');
+
 const Crypto = require('../lib/crypto');
 
 module.exports = {
@@ -29,14 +30,14 @@ module.exports = {
         return h.redirect('/');
       }
 
-      return h.view('pages/login');
+      return h.view('pages/login', { ...request.query });
     },
     auth: {
       mode: 'try'
     },
     validate: {
       query: {
-        email: Joi.string().default('')
+        next: Joi.string()
       }
     }
   },

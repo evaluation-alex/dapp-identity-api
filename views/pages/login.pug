@@ -6,6 +6,7 @@ block content
         .message.message-error #{errors.page}
       form(method='post')
         input(type='hidden' name='crumb' value=crumb)
+        input(type='hidden' name='next' value=next)
         fieldset
           legend Log in
           .form-element

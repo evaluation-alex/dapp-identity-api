@@ -8,6 +8,23 @@ const lab = exports.lab = require('lab').script();
 const { expect } = require('code');
 const { describe, it, before, after } = lab;
 
+describe('Auth', () => {
+
+  let server;
+  before(async () => {
+
+    server = await Server;
+  });
+
+  it('page requiring auth redirects to login form', async () => {
+
+    const url = '/sign?proof=dummytext';
+    const res = await server.inject({ method: 'get', url });
+    expect(res.statusCode).to.equal(302);
+    expect(res.headers.location).to.equal(`/login?next=${encodeURIComponent(url)}`);
+  });
+});
+
 describe('GET /login', () => {
 
   let server;
@@ -23,6 +40,15 @@ describe('GET /login', () => {
     const $ = Cheerio(res.result);
     expect($.find('input[name="email"]', 'Email input').length).equal(1);
     expect($.find('input[name="password"]', 'Password input').length).equal(1);
+  });
+
+  it('passes next parameter to form', async () => {
+
+    const next = '/sign?proof=dummytext';
+    const res = await server.inject({ method: 'get', url: `/login?next=${encodeURIComponent(next)}` });
+    expect(res.statusCode).to.equal(200);
+    const $ = Cheerio(res.result);
+    expect($.find('input[name="next"]', 'Next parameter').val()).equal(next);
   });
 });
 
@@ -98,8 +124,33 @@ describe('POST /login', () => {
     });
     expect(res.statusCode).to.equal(302);
     const authCookie = Fixtures.getAuthCookie(res.headers['set-cookie']);
-    console.log(res.headers.location);
     res = await server.inject({ method: 'get', url: res.headers.location, headers: { 'Cookie': authCookie } });
     expect(res.statusCode).to.equal(200);
+  });
+
+  it('redirects back to next parameter', async () => {
+
+    const url = '/sign?proof=dummytext';
+    const res = await server.inject({
+      method: 'post',
+      url: '/login',
+      headers: { Cookie: 'crumb=test' },
+      payload: { crumb: 'test', email: existingUser.email, password: existingPassword, next: url }
+    });
+    expect(res.statusCode).to.equal(302);
+    expect(res.headers.location).to.equal(url);
+  });
+
+  it('next parameter is sanitized to path only', async () => {
+
+    const url = '/sign?proof=dummytext';
+    const res = await server.inject({
+      method: 'post',
+      url: '/login',
+      headers: { Cookie: 'crumb=test' },
+      payload: { crumb: 'test', email: existingUser.email, password: existingPassword, next: `http://hackersite.bad${url}` }
+    });
+    expect(res.statusCode).to.equal(302);
+    expect(res.headers.location).to.equal(url);
   });
 });

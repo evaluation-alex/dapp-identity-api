@@ -1,11 +1,12 @@
 'use strict';
 
 /*
- * Destinations for non dashboard or admin forms here, since naming is clunky if
+ * Destinations for forms here, since naming is clunky if
  * they're in the same namespace as the pages themselves
  */
-const Joi = require('joi');
 const BCrypt = require('bcrypt');
+const Joi = require('joi');
+const Url = require('url');
 
 module.exports = {
   login: {
@@ -24,6 +25,11 @@ module.exports = {
       delete user.hash;
       request.cookieAuth.set(user);
 
+      if (request.payload.next) {
+        const next = Url.parse(request.payload.next);
+        return h.redirect(next.path);
+      }
+
       if (user.scope.indexOf('admin') > -1) {
         return h.redirect('/admin');
       }
@@ -41,7 +47,8 @@ module.exports = {
       },
       payload: {
         email: Joi.string().required().label('Email'),
-        password: Joi.string().required().label('Password')
+        password: Joi.string().required().label('Password'),
+        next: Joi.string()
       }
     }
   }
