@@ -1,8 +1,8 @@
 'use strict';
 
-const Fixtures = require('./fixtures');
 const Cheerio = require('cheerio');
 
+const Fixtures = require('./fixtures');
 const { Server, db } = Fixtures;
 const lab = exports.lab = require('lab').script();
 const { expect } = require('code');

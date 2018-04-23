@@ -57,13 +57,14 @@ module.exports = {
     notes: 'Returns a form prompting the user for their password',
     handler: async function (request, h) {
 
-      const proof_parts = proof.split('.');
-      const context = { ...request.query, session_id: proof_parts[1]
-      return h.view('pages/sign', request.query)
+      const user = request.auth.credentials;
+      const { proof } = request.query;
+      await Crypto.validateProof(request, proof); //Just validate it here, nothing more
+      return h.view('pages/sign', { proof, user });
     },
     validate: {
       query: {
-        proof: Joi.string().description('Session proof to sign').regex(/\w\.\w\.\w\.\w/).required()
+        proof: Joi.string().description('Session proof to sign').required()
       }
     }
   }
