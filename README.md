@@ -11,6 +11,7 @@ $ npm install
 $ npm run createdb
 $ npm run sqlextensions
 $ npm run migrate
+$ node bin/generate_key.js
 ```
 
 If you want to seed the db w/ a test user run
