@@ -7,20 +7,20 @@ module.exports = [
   { method: 'GET', path: '/__healthcheck__', config: Controllers.healthcheck },
 
   { method: 'GET', path: '/', config: Controllers.pages.home },
+
+  // login
   { method: 'GET', path: '/login', config: Controllers.pages.login },
   { method: 'POST', path: '/login', config: Controllers.actions.login },
 
+  // api
   { method: 'GET', path: '/key', config: Controllers.pages.key },
-  //Look up user by id or email
   { method: 'GET', path: '/user', config: Controllers.pages.user },
-  //Look up signatures by session or user_id
-  //{ method: 'GET', path: '/signatures', Controllers.pages.signatures },
+  { method: 'GET', path: '/proof/{user_id}/{session_id}', config: Controllers.pages.proof },
 
-  // Authenticated routes
+  // authenticated routes
   { method: 'GET', path: '/sign', config: Controllers.pages.sign },
   { method: 'POST', path: '/sign', config: Controllers.actions.sign },
-  //{ method: 'GET', path: '/signatures', config: Controllers.pages.signatures },
 
-  //Static assets
+  // static assets
   { method: 'GET', path: '/{path*}', config: { handler: { directory: { path: './public', listing: false } }, auth: false } }
 ];

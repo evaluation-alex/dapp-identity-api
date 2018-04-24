@@ -18,6 +18,13 @@ Config.hapi.cache.engine = require(Config.hapi.cache.engine);
 const { isDev } = Config.getconfig;
 
 const db = new Muckraker(Config.db);
+//We don't have top level await but we need to export the keyPair
+//for testing purposes, so we made importKeyPair await the readFile result,
+//and we await keyPair in tests and before we bind it to the server.
+const jwts = fsReadFile('key_pair.json');
+const keyPair = Crypto.importKeyPair(jwts);
+
+//$lab:coverage:off$
 
 //Some CI environments don't have $PORT set during postinstall
 if (process.env.NODE_ENV === 'production') {
@@ -26,7 +33,6 @@ if (process.env.NODE_ENV === 'production') {
 
 const server = new Hapi.Server(Config.hapi);
 
-//$lab:coverage:off$
 process.on('SIGTERM', async () => {
 
   server.log(['info', 'shutdown'], 'Graceful shutdown');
@@ -40,6 +46,7 @@ server.events.on({ name: 'request', channels: ['error'] }, (request, event) => {
 });
 //$lab:coverage:on$
 
+module.exports.keyPair = keyPair;
 module.exports.db = db;
 module.exports.server = (async () => {
 
@@ -81,10 +88,8 @@ module.exports.server = (async () => {
   });
   server.auth.default('session');
 
-  const jwts = await fsReadFile('key_pair.json');
-  const keyPair = await Crypto.importKeyPair(jwts);
-
-  server.bind({ db, keyPair });
+  const kp = await keyPair;
+  server.bind({ db, keyPair: kp });
   server.route(require('./routes'));
 
 

@@ -31,9 +31,6 @@ module.exports = {
         return h.redirect(next.path);
       }
 
-      if (user.scope.indexOf('admin') > -1) {
-        return h.redirect('/admin');
-      }
       return h.redirect('/');
     },
     auth: false,
@@ -67,7 +64,7 @@ module.exports = {
       const { sessionId } =  await Crypto.validateProof(request, proof);
       const signature = await Crypto.sign(proof, this.keyPair);
       const record = {
-        session_id: sessionId.toString('utf8'),
+        session_id: sessionId,
         user_id: user.id,
         proof,
         signature

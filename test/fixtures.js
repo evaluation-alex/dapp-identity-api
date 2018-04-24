@@ -11,6 +11,7 @@ const Crypto = require('../lib/crypto');
 exports.Server = Server.server;
 exports.db = Server.db;
 exports.Crypto = Crypto;
+exports.keyPair = Server.keyPair; //Await this before using it
 
 exports.user = function (attrs, id, encrypt_password) {
 

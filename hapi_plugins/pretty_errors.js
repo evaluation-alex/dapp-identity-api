@@ -18,9 +18,12 @@ const register = function (plugin, options) {
 
     const statusCode = Hoek.reach(request, 'response.output.statusCode');
 
+    //$lab:coverage:off$
     if (statusCode >= 500) {
       plugin.log(['error'], request.response);
     }
+    //$lab:coverage:on$
+
     return h.view('error', {
       errors: { page: Hoek.reachTemplate(request, '{response.output.statusCode}: {response.output.payload.error}') }
     }).takeover().code(statusCode);

@@ -28,9 +28,16 @@ describe('Auth', () => {
 describe('GET /login', () => {
 
   let server;
+  const user = Fixtures.user();
   before(async () => {
 
     server = await Server;
+    await db.users.insert(user);
+  });
+
+  after(async () => {
+
+    await db.users.destroy({ id: user.id });
   });
 
   it('returns the login form', async () => {
@@ -49,6 +56,13 @@ describe('GET /login', () => {
     expect(res.statusCode).to.equal(200);
     const $ = Cheerio(res.result);
     expect($.find('input[name="next"]', 'Next parameter').val()).equal(next);
+  });
+
+  it('already logged in', async () => {
+
+    const res = await server.inject({ method: 'get', url: '/login', credentials: user });
+    expect(res.statusCode).to.equal(302);
+    expect(res.headers.location).to.equal('/');
   });
 });
 

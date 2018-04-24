@@ -106,4 +106,22 @@ describe('POST /sign', () => {
     const $ = Cheerio(res.result);
     expect($.find('input[name="password"] + .message.message-error').text()).to.equal('Invalid Password');
   });
+
+  it('no password', async () => {
+
+    const payload = {
+      crumb: 'test',
+      proof
+    };
+    const res = await server.inject({
+      method: 'post',
+      url: `/sign`,
+      credentials: user,
+      headers: { Cookie: 'crumb=test' },
+      payload
+    });
+    expect(res.statusCode).to.equal(400);
+    const $ = Cheerio(res.result);
+    expect($.find('input[name="password"] + .message.message-error').text()).to.equal('"Password" is required');
+  });
 });
