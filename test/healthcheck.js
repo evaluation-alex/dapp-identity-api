@@ -17,7 +17,7 @@ describe('Healthcheck', () => {
 
   it('works', async () => {
 
-    const res = await server.inject({ url: '/__healthcheck__' });
+    const res = await server.inject({ method: 'get', url: '/__healthcheck__' });
     expect(res.statusCode).to.equal(200);
   });
 });

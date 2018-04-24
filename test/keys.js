@@ -17,7 +17,7 @@ describe('GET /key', () => {
 
   it('works', async () => {
 
-    const res = await server.inject({ url: '/key' });
+    const res = await server.inject({ method: 'get', url: '/key' });
     expect(res.statusCode).to.equal(200);
     const key = await Crypto.importPublicKey(res.result);
     expect(key).to.exist();

@@ -1,10 +1,12 @@
 'use strict';
 
+const BCrypt = require('bcrypt');
+const Bs58 = require('bs58');
+const Config = require('getconfig');
+const Faker = require('faker');
+
 const Server = require('../server');
 const Crypto = require('../lib/crypto');
-const Config = require('getconfig');
-const BCrypt = require('bcrypt');
-const Faker = require('faker');
 
 exports.Server = Server.server;
 exports.db = Server.db;
@@ -39,6 +41,32 @@ exports.password = function () {
 exports.sessionId = function () {
 
   return Faker.random.uuid();
+};
+
+exports.proof = async function (attrs) {
+
+  const defaults = {
+    sessionId: Faker.random.uuid(),
+    userId: Faker.random.uuid()
+  };
+
+  const parts = { ...defaults, ...attrs };
+  if (!parts.keyPair) {
+    parts.keyPair = await Crypto.generateKeyPair();
+  }
+  const userId = Buffer.from(parts.userId);
+  const sessionId = Buffer.from(parts.sessionId);
+  const userSession = `${Bs58.encode(parts.userId)}.${Bs58.encode(parts.sessionId)}`;
+  const signature = await Crypto.sign(userSession, parts.keyPair);
+  const publicKey = await Crypto.exportPublicKey(parts.keyPair);
+  const proof = [
+    Bs58.encode(userId),
+    Bs58.encode(sessionId),
+    signature,
+    publicKey
+  ].join('.');
+
+  return proof;
 };
 
 exports.getAuthCookie = function (cookies) {

@@ -60,7 +60,7 @@ module.exports = {
 
       const user = request.auth.credentials;
       const { proof } = request.query;
-      await Crypto.validateProof(request, proof); //Just validate it here, nothing more
+      await Crypto.validateProof(request, proof);
       return h.view('pages/sign', { proof, user });
     },
     validate: {

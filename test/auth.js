@@ -71,7 +71,12 @@ describe('POST /login', () => {
 
   it('email is required', async () => {
 
-    const res = await server.inject({ method: 'post', url: '/login', headers: { Cookie: 'crumb=test' }, payload: { crumb: 'test' } });
+    const res = await server.inject({
+      method: 'post',
+      url: '/login',
+      headers: { Cookie: 'crumb=test' },
+      payload: { crumb: 'test' }
+    });
     expect(res.statusCode).to.equal(400);
     const $ = Cheerio(res.result);
     expect($.find('input[name="email"] + .message.message-error').text()).to.equal('"Email" is required');

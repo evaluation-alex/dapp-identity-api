@@ -18,7 +18,7 @@ module.exports = [
 
   // Authenticated routes
   { method: 'GET', path: '/sign', config: Controllers.pages.sign },
-  //{ method: 'POST', path: '/sign', config: Controllers.actions.sign },
+  { method: 'POST', path: '/sign', config: Controllers.actions.sign },
   //{ method: 'GET', path: '/signatures', config: Controllers.pages.signatures },
 
   //Static assets
