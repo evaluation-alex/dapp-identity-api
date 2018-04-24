@@ -20,6 +20,10 @@
     "isSecure": false
   },
   "hapi": {
+    "cache": {
+      "engine": "catbox-memory",
+      "name": "memory"
+    },
     "host": "0.0.0.0",
     "port": 8001,
     "routes": {
@@ -30,6 +34,16 @@
   "pino": {
     "prettyPrint": true,
     "ignorePaths": ["/__healthcheck__"]
+  },
+  "rateLimit": {
+    "userLimit": false,
+    "pathLimit": false
+  },
+  "getUserRateLimit": {
+    "pathLimit": 1,
+    "pathCache": {
+      "expiresIn": 5000
+    }
   },
   "crumb": {
     "cookieOptions": {

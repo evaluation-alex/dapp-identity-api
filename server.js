@@ -13,6 +13,7 @@ const { promisify } = require('util');
 const fsReadFile = promisify(Fs.readFile);
 
 Config.pino.serializers = PinoNoir(['req.headers.cookie', 'res.header']);
+Config.hapi.cache.engine = require(Config.hapi.cache.engine);
 
 const { isDev } = Config.getconfig;
 
@@ -55,6 +56,9 @@ module.exports.server = (async () => {
   }, {
     plugin: require('hapi-pino'),
     options: Config.pino
+  }, {
+    plugin: require('hapi-rate-limit'),
+    options: Config.rateLimit
   }]);
 
   server.views({

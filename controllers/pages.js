@@ -4,6 +4,8 @@
  * Static rendering of unauthenticated pages here
  */
 const Joi = require('joi');
+const Config = require('getconfig');
+const Boom = require('boom');
 
 const Crypto = require('../lib/crypto');
 
@@ -68,6 +70,29 @@ module.exports = {
         proof: Joi.string().description('Session proof to sign').required()
       }
     }
-  }
+  },
 
+  user: {
+    description: 'Look up user by id or email',
+    tags: ['api'],
+    handler: async function (request, h) {
+
+      const exists = await this.db.users.findOne(request.query, ['id', 'name']);
+      if (!exists) {
+        throw Boom.notFound();
+      }
+
+      return exists;
+    },
+    validate: {
+      query: {
+        email: Joi.string().label('Email'),
+        id: Joi.string().guid().label('User ID')
+      }
+    },
+    auth: false,
+    plugins: {
+      'hapi-rate-limit': Config.getUserRateLimit
+    }
+  }
 };

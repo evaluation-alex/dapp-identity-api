@@ -12,7 +12,7 @@ module.exports = [
 
   { method: 'GET', path: '/key', config: Controllers.pages.key },
   //Look up user by id or email
-  //{ method: 'GET', path: '/user', config: Controllers.pages.user },
+  { method: 'GET', path: '/user', config: Controllers.pages.user },
   //Look up signatures by session or user_id
   //{ method: 'GET', path: '/signatures', Controllers.pages.signatures },
 

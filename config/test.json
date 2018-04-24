@@ -1,5 +1,8 @@
 {
   "pino": {
     "level": "silent"
+  },
+  "getUserRateLimit": {
+    "pathLimit": false
   }
 }
