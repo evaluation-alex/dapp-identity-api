@@ -1,21 +1,10 @@
+block vars
 doctype html
 html(lang='en')
   head
-    link(rel='stylesheet' href='/css/andlight.css')
-    link(rel='stylesheet' href='/css/main.min.css')
-    style(type='text/css').
-      .form-input {
-        border: 1px solid #00b0e9;
-      }
-      .content {
-        max-width: 1280px;
-      }
-      .nav-container {
-        max-width: 1280px;
-        margin: auto;
-      }
+    link(rel='stylesheet' href=`/css/main${isDev ? '' : '.min'}.css`)
     block script
-  body
+  body(class=bodyClass)
     h1
       a(href='/') DAPP Identity Server
     nav.top-nav.top-nav-light.cf(role='navigation')

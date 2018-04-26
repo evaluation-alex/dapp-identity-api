@@ -74,6 +74,7 @@ module.exports.server = (async () => {
       pug: require('pug')
     },
     compileOptions: { pretty: isDev },
+    context: { isDev },
     relativeTo: __dirname,
     path: 'views'
   });
