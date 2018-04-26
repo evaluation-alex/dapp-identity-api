@@ -2,4 +2,3 @@ node_modules
 *.log
 local.json
 key_pair.json
-public/css/main*.css

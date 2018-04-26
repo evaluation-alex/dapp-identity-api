@@ -14,9 +14,8 @@
     "migrate": "knex migrate:latest",
     "createdb": "psql -d postgres -c \"CREATE ROLE $(node -pe 'require(\"getconfig\").db.connection.user') WITH PASSWORD '$(node -pe 'require(\"getconfig\").db.connection.password')' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN\" && createdb $(node -pe 'require(\"getconfig\").db.connection.database') -O $(node -pe 'require(\"getconfig\").db.connection.user')",
     "sqlextensions": "psql -d $(node -pe 'require(\"getconfig\").db.connection.database') -c 'CREATE EXTENSION pgcrypto; CREATE EXTENSION citext; CREATE EXTENSION \"uuid-ossp\"'",
-    "stylus": "stylus styles/main.styl -o public/css/main.css",
-    "stylus:watch": "npm run stylus -- -w",
-    "stylus:min": "npm run stylus -- -c -o public/css/main.min.css"
+    "stylus": "stylus styles/main.styl -o public/css/main.min.css -c -m",
+    "stylus:watch": "npm run stylus -- -w"
   },
   "keywords": [],
   "author": "Gar <gar+npm@danger.computer>",
