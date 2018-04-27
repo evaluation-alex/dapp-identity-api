@@ -28,3 +28,11 @@ To run the server
 ```sh
 $ npm start
 ```
+
+To compile the css
+
+```sh
+$ npm run stylus
+# Or if you want to watch the stylus files and recompile on changes
+$ npm run stylus:watch
+```
