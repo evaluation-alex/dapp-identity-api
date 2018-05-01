@@ -1,0 +1,47 @@
+/*--------------------------------------------------------------------
+* $MESSAGES
+--------------------------------------------------------------------*/
+
+.message
+  margin: 10px 0
+  padding: 10px
+  position: relative
+  background-color: lighten($blue,80%)
+  color: darken($blue,10%)
+
+  a
+    font-weight: bold
+    color: darken($blue,20%)
+
+  p:last-of-type
+    margin: 0
+
+.message-error
+  background-color: lighten($red,75%)
+  color: $red
+
+  a
+    color: darken($red, 20%)
+
+    &:hover
+      color: darken($red, 40%)
+
+.message-alert
+  background-color: lighten($orange,70%)
+  color: $orange
+
+  a
+    color: darken($orange, 30%)
+
+    &:hover
+      color: darken($orange, 45%)
+
+.message-success
+  background-color: lighten($turquoise,75%)
+  color: darken($turquoise, 20%)
+
+  a
+    color: darken($turquoise, 40%)
+
+    &:hover
+      color: darken($turquoise, 45%)

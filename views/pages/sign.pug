@@ -1,9 +1,11 @@
 extends ../layout
+
 block vars
   - var bodyClass = 'sign-page'
+
 block content
-  .grid-flex-container
-    .grid-flex-cell
+
+  .panel
       - if (errors && errors.page)
         .message.message-error #{errors.page}
       form(method='post')
