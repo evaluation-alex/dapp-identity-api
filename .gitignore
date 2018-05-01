@@ -2,3 +2,4 @@ node_modules
 *.log
 local.json
 key_pair.json
+.DS_Store

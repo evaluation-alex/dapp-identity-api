@@ -1,0 +1,138 @@
+/*--------------------------------------------------------------------
+* $FORMS
+--------------------------------------------------------------------*/
+
+legend, label
+  font-weight: bold
+
+legend
+  margin-bottom: 20px
+  font-size: 20px
+
+label
+  display: block
+  margin-bottom: 5px
+  font-size: 12px
+  cursor: pointer
+  opacity: .8
+
+select,
+.form-input,
+.form-radio,
+.form-checkbox
+  outline: 0
+
+.form-inline
+  overflow: hidden
+
+//- General inputs
+
+.form-element
+  margin-bottom: 20px
+
+.form-input
+  width: 100%
+  padding: 15px
+  display: block
+  border-radius: 3px
+  border: 1px solid $gray-light
+  font-size: 16px
+  color: $gray-text
+  -webkit-appearance: none
+
+  &:focus
+    transition: all .2s ease-in
+    border: 1px solid $blue
+    background-color: lighten($blue, 95%)
+
+  &:disabled
+    background-color: lighten($gray-light, 80%)
+    cursor: not-allowed
+
+  &:required:focus
+    border: 1px solid $orange
+    background-color: lighten($orange, 90%)
+
+  &.input-invalid
+    border: 1px solid $red
+    color: lighten($red, 50%)
+
+    &:focus
+      border: 1px solid $red
+      background-color: lighten($red, 80%)
+
+  &.input-valid
+    border: 1px solid $turquoise
+    color: lighten($turquoise, 40%)
+
+    &:focus
+      border: 1px solid $turquoise
+      background-color: lighten($turquoise, 80%)
+
+textarea
+  resize: none
+  min-height: 90px
+
+input[type=file],
+label.radio,
+label.checkbox,
+select
+  cursor: pointer
+
+//- Selects
+
+select
+  border: $ui-border
+  height: 40px
+  padding: $ui-padding-default
+  width: 100%
+  background-color: white
+
+  &:focus
+    border: 1px solid $blue
+
+  &:focus:-moz-focusring
+    color: transparent
+    text-shadow: 0 0 0 #000
+
+//- Radio and Checkbox
+
+.input-radio, 
+.input-checkbox
+  margin: 5px 0
+  font-size: 16px
+  font-weight: normal
+
+  &.disabled
+    color: $gray-light
+    cursor: not-allowed
+
+  input[type=checkbox], 
+  input[type=radio]
+    display: inline-block
+    margin-right: 10px
+
+@media screen and (min-width: $mobile + 1)
+
+  .form-inline.form-no-labels
+    
+    .button
+      margin-top: 0
+
+  .form-inline 
+    
+    .form-element
+      float: left
+      width: 50%
+      
+    .button
+      margin-top: $space*.75
+
+    .form-element:not(:first-of-type)
+      padding-left: 5px
+
+    .form-input,
+    .input-checkbox,
+    .input-radio, 
+    select
+      margin: 0

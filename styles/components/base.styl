@@ -1,0 +1,28 @@
+/*--------------------------------------------------------------------
+* $BASE STYLES
+--------------------------------------------------------------------*/
+
+*, *:before, *:after
+  box-sizing: border-box
+
+::selection
+  background: $turquoise
+  color: $black
+
+body
+  min-height: 100vh
+  background: $offwhite
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif
+  font-size: 16px
+  line-height: 1.4
+  color: $gray-text
+
+a
+  text-decoration: none
+  color: darken($blue,10%)
+  
+a:not(.button)
+  transition: .3s opacity ease-in-out
+
+  &:hover
+    opacity: .7

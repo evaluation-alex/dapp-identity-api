@@ -1,0 +1,57 @@
+/*--------------------------------------------------------------------
+* $BUTTONS
+--------------------------------------------------------------------*/
+
+.button
+  padding: 10px 20px
+  display: inline-block
+  border: none
+  border-radius: 3px
+  background-color: $teal
+  font-size: 14px
+  line-height: 1
+  text-align: center
+  color: white
+  cursor: pointer
+  transition: .3s background-color ease-in-out
+
+  &:hover
+    background-color: lighten($teal, 20%)
+
+  &:disabled,
+  &.button-disabled
+    background-color: $gray-light
+    color: $gray-text
+    cursor: not-allowed
+
+  &.full-width
+    display: block
+
+  & + .button
+    margin-left: 10px
+
+.button-secondary
+  background-color: $black
+  &:hover
+    background-color: lighten($black, 20%)
+
+.button-warn
+  background-color: $orange
+  &:hover
+    background-color: lighten($orange, 20%)
+
+.button-danger
+  background-color: $red
+  &:hover
+    background-color: lighten($red, 20%)
+
+.button-unstyled,
+.button-unstyled:hover
+  background-color: transparent
+
+.button-unstyled
+  padding: 0
+  color: $blue
+
+  &:hover
+    color: darken($blue, 20%)
