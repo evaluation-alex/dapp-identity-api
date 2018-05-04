@@ -8,6 +8,10 @@ module.exports = [
 
   { method: 'GET', path: '/', config: Controllers.pages.home },
 
+  // signup
+  { method: 'GET', path: '/signup', config: Controllers.pages.signup },
+  { method: 'POST', path: '/signup', config: Controllers.actions.signup },
+
   // login
   { method: 'GET', path: '/login', config: Controllers.pages.login },
   { method: 'POST', path: '/login', config: Controllers.actions.login },

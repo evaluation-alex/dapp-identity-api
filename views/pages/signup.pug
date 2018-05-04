@@ -1,0 +1,22 @@
+extends ../layout
+
+block vars
+  - var bodyClass = 'signup-page'
+
+block content
+
+  .panel
+    - if (errors && errors.page)
+      .message.message-error #{errors.page}
+    form(method='post')
+      input(type='hidden' name='crumb' value=crumb)
+      fieldset
+        legend First, validate your email. You will be sent a link to complete the account creation process
+        .form-element
+          label(for='email') Email
+          input(type='text' id='email' class='form-input' name='email' value=email)
+          - if (errors && errors.email)
+            .message.message-error #{errors.email}
+        .form-element
+          button(type='submit' class='button button-primary') Sign Up
+          a.button.button-unstyled(href='/login') Already have an account?

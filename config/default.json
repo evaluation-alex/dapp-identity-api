@@ -45,6 +45,12 @@
       "expiresIn": 5000
     }
   },
+  "signupRateLimit": {
+    "pathLimit": 1,
+    "pathCache": {
+      "expiresIn": 15000
+    }
+  },
   "crumb": {
     "cookieOptions": {
       "isSecure": false

@@ -5,9 +5,12 @@
  * they're in the same namespace as the pages themselves
  */
 const BCrypt = require('bcrypt');
+const Config = require('getconfig');
 const Joi = require('joi');
 const Url = require('url');
+
 const Crypto = require('../lib/crypto');
+const Email = require('../lib/email');
 
 module.exports = {
   login: {
@@ -85,6 +88,41 @@ module.exports = {
         proof: Joi.string().required().label('Identity Proof'),
         password: Joi.string().required().label('Password')
       }
+    }
+  },
+
+  signup: {
+    description: 'Destination for signup form',
+    handler: async function (request, h) {
+
+      const email = request.payload.email;
+      //See if it already exists.
+      //Limit to more recently than 15 minutes so we don't spam emails
+      const recent = await this.db.signups.for_email({ email, interval: '15 minutes' });
+      if (!recent) {
+        //Make a new one, resetting the 15 minute timer
+        await this.db.signups.destroy({ email });
+        const new_signup = await this.db.signups.insert({ email });
+        await Email.send({
+          template: 'signup.html',
+          context: { token: new_signup.id, baseUrl: Config.baseUrl  },
+          params: {
+            subject: 'DAPP identity server signup - please verify your email',
+            to: email
+          }
+        });
+      }
+      //We render this no matter what the outcome
+      return h.view('pages/signup_wait');
+    },
+    validate: {
+      payload: {
+        email: Joi.string().email().required()
+      }
+    },
+    auth: false,
+    plugins: {
+      'hapi-rate-limit': Config.signupRateLimit
     }
   }
 };

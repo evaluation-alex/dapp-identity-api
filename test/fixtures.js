@@ -70,6 +70,17 @@ exports.proof = async function (attrs) {
   return proof;
 };
 
+exports.signup = function (attrs, id) {
+  const defaults = {
+    email: Faker.internet.email()
+  }
+  if (id !== false) {
+    defaults.id = Faker.random.uuid();
+  }
+  const signup = { ...defaults, ...attrs };
+  return signup;
+};
+
 exports.getAuthCookie = function (cookies) {
 
   for (const cookie of cookies) {

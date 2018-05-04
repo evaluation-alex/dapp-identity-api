@@ -1,0 +1,27 @@
+
+extends ../layout
+
+block vars
+  - var bodyClass = 'create-account-page'
+
+block content
+
+  .panel
+    - if (errors && errors.page)
+      .message.message-error #{errors.page}
+    form(method='post' action='/create_account')
+      input(type='hidden' name='crumb' value=crumb)
+      input(type='hidden' name='token' value=token)
+      fieldset
+        legend Token validated. Please set a name and password to create your account.
+        .form-element
+          label(for='name') Name
+          input(type='text' id='name' class='form-input' name='name' required)
+          - if (errors && errors.name)
+            .message.message-error #{errors.name}
+          label(for='password') Password
+          input(type='password' id='password' class='form-input' name='password' required pattern='{8, }' title='Must be at least 8 characters')
+          - if (errors && errors.password)
+            .message.message-error #{errors.password}
+        .form-element
+          button(type='submit' class='button button-primary') Create Account

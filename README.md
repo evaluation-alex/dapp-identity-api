@@ -36,3 +36,7 @@ $ npm run stylus
 # Or if you want to watch the stylus files and recompile on changes
 $ npm run stylus:watch
 ```
+
+By default this server will intercept 4xx and 5xx replies and convert
+them to html.  Routes tagged with `api` will not have this behavior
+applied to them.

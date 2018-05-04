@@ -4,5 +4,8 @@
   },
   "getUserRateLimit": {
     "pathLimit": false
+  },
+  "signupRateLimit": {
+    "pathLimit": false
   }
 }

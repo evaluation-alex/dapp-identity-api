@@ -114,5 +114,33 @@ module.exports = {
       }
     },
     auth: false
+  },
+
+  signup: {
+    description: 'Create an account',
+    handler: async function (request, h) {
+
+      if (request.auth.isAuthenticated) {
+        return h.redirect('/');
+      }
+
+      if (request.query.token) {
+        const exists = await this.db.signups.by_token({ token: request.query.token, interval: '3 hours' });
+        if (!exists) {
+          throw Boom.notFound('Invalid token');
+        }
+        return h.view('pages/create_account');
+      }
+      return h.view('pages/signup');
+    },
+    auth: {
+      mode: 'try'
+    },
+    validate: {
+      query: {
+        token: Joi.string().guid().description('Token emailed to user as part of signup flow')
+      }
+    }
+
   }
 };
