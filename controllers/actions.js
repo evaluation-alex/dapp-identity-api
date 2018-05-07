@@ -115,12 +115,12 @@ module.exports = {
       //We render this no matter what the outcome
       return h.view('pages/signup_wait');
     },
+    auth: false,
     validate: {
       payload: {
         email: Joi.string().email().required()
       }
     },
-    auth: false,
     plugins: {
       'hapi-rate-limit': Config.signupRateLimit
     }

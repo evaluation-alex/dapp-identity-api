@@ -55,5 +55,8 @@
     "cookieOptions": {
       "isSecure": false
     }
+  },
+  "email": {
+    "from": "DAPP Identity server <howdy@andyet.com>"
   }
 }

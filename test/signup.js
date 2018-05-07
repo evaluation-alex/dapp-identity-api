@@ -2,11 +2,13 @@
 
 const Cheerio = require('cheerio');
 const Faker = require('faker');
+const AWS = require('../lib/email/aws');
+const StandIn = require('stand-in');
 const Fixtures = require('./fixtures');
 const { Server, db } = Fixtures;
 const lab = exports.lab = require('lab').script();
 const { expect } = require('code');
-const { describe, it, before, after } = lab;
+const { fail, describe, it, before, after, afterEach } = lab;
 
 describe('GET /signup', () => {
 
@@ -54,6 +56,7 @@ describe('POST /signup', () => {
   let server;
   const new_signup = Fixtures.signup();
   const stale_signup = Fixtures.signup({ created_at: Faker.date.past() });
+  const new_user = Fixtures.user();
 
   before(async () => {
 
@@ -70,5 +73,94 @@ describe('POST /signup', () => {
       db.signups.destroy({ id: new_signup.id }),
       db.signups.destroy({ id: stale_signup.id })
     ]);
+  });
+
+  afterEach(() => {
+
+    StandIn.restoreAll();
+  });
+
+  it('new user', async () => {
+
+    let standin;
+    const wait = new Promise((resolve) => {
+
+      standin = StandIn.replace(AWS, 'sendEmail', (stand, params) => {
+
+        expect(params.Destination.ToAddresses).to.include(new_user.email);
+        stand.restore();
+        resolve();
+      });
+    });
+
+    const payload = {
+      crumb: 'test',
+      email: new_user.email
+    };
+
+    const res = await server.inject({
+      method: 'post',
+      url: '/signup',
+      headers: { Cookie: 'crumb=test' },
+      payload
+    });
+    expect(res.statusCode).to.equal(200);
+    await wait;
+    const created_signup = await db.signups.findOne({ email: new_user.email });
+    expect(created_signup).to.exist();
+    expect(standin.invocations).to.equal(1);
+  });
+
+  it('duplicate attempt', async () => {
+
+    const standin = StandIn.replace(AWS, 'sendEmail', (stand, params) => {
+
+      fail('Should not call AWS');
+    });
+
+    const payload = {
+      crumb: 'test',
+      email: new_signup.email
+    };
+    const res = await server.inject({
+      method: 'post',
+      url: '/signup',
+      headers: { Cookie: 'crumb=test' },
+      payload
+    });
+    expect(res.statusCode).to.equal(200);
+    expect(standin.invocations).to.equal(0);
+    standin.restore();
+  });
+
+  it('stale token', async () => {
+
+    let standin;
+    const wait = new Promise((resolve) => {
+
+      standin = StandIn.replace(AWS, 'sendEmail', (stand, params) => {
+
+        expect(params.Destination.ToAddresses).to.include(stale_signup.email);
+        stand.restore();
+        resolve();
+      });
+    });
+
+    const payload = {
+      crumb: 'test',
+      email: stale_signup.email
+    };
+    const res = await server.inject({
+      method: 'post',
+      url: '/signup',
+      headers: { Cookie: 'crumb=test' },
+      payload
+    });
+    expect(res.statusCode).to.equal(200);
+    await wait;
+    const updated_signup = await db.signups.findOne({ email: stale_signup.email });
+    expect(updated_signup.created_at).to.not.equal(stale_signup.created_at);
+    expect(standin.invocations).to.equal(1);
+    standin.restore();
   });
 });

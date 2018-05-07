@@ -71,9 +71,10 @@ exports.proof = async function (attrs) {
 };
 
 exports.signup = function (attrs, id) {
+
   const defaults = {
     email: Faker.internet.email()
-  }
+  };
   if (id !== false) {
     defaults.id = Faker.random.uuid();
   }
