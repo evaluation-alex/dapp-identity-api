@@ -124,5 +124,51 @@ module.exports = {
     plugins: {
       'hapi-rate-limit': Config.signupRateLimit
     }
+  },
+
+  create_account: {
+    description: 'Destination for create account form',
+    handler: async function (request, h) {
+
+      const token = await this.db.signups.by_token({ token: request.payload.token, interval: '3 hours' });
+      if (!token) {
+        const errors = {
+          token: 'Invalid or missing token'
+        };
+        return h.view('pages/create_account', { ...request.payload, errors }).code(400);
+      }
+      const created_user = await this.db.tx(async (tx) => {
+
+        const hash = await BCrypt.hash(request.payload.password, 10);
+        const attrs = {
+          name: request.payload.name,
+          email: token.email,
+          hash
+        };
+        await tx.signups.destroy({ id: token.id });
+        const user = await tx.users.insert(attrs);
+        return user;
+      });
+      const login = await this.db.users.login({ email: created_user.email });
+      delete login.hash;
+      request.cookieAuth.set(created_user);
+      return h.redirect('/', { message: 'Account created' });
+    },
+    auth: false,
+    validate: {
+      failAction: function (request, h, error) {
+
+        const errors = {};
+        for (const detail of error.details) {
+          errors[detail.context.key] = detail.message;
+        }
+        return h.view('pages/create_account', { ...request.payload, errors }).code(400).takeover();
+      },
+      payload: {
+        name: Joi.string().required().label('Name'),
+        password: Joi.string().required().label('Password'),
+        token: Joi.string().guid().required().description('Token emailed to user as part of signup flow')
+      }
+    }
   }
 };

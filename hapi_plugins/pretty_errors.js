@@ -20,7 +20,6 @@ const register = function (plugin, options) {
 
     //$lab:coverage:off$
     if (statusCode >= 500) {
-      console.log(request.response);
       plugin.log(['error'], request.response);
     }
     //$lab:coverage:on$

@@ -14,16 +14,19 @@ describe('GET /signup', () => {
 
   let server;
   const signup = Fixtures.signup();
+  const user = Fixtures.user();
 
   before(async () => {
 
     server = await Server;
     await db.signups.insert(signup);
+    await db.users.insert(user);
   });
 
   after(async () => {
 
     await db.signups.destroy({ id: signup.id });
+    await db.users.destroy({ id: user.id });
   });
 
   it('no token', async () => {
@@ -48,6 +51,13 @@ describe('GET /signup', () => {
     const invalid = Fixtures.signup();
     const res = await server.inject({ method: 'get', url: `/signup?token=${invalid.id}` });
     expect(res.statusCode).to.equal(404);
+  });
+
+  it('already logged in', async () => {
+
+    const res = await server.inject({ method: 'get', url: `/signup?token=${signup.id}`, credentials: user });
+    expect(res.statusCode).to.equal(302);
+    expect(res.headers.location).to.equal('/');
   });
 });
 

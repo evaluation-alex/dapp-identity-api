@@ -11,6 +11,7 @@ module.exports = [
   // signup
   { method: 'GET', path: '/signup', config: Controllers.pages.signup },
   { method: 'POST', path: '/signup', config: Controllers.actions.signup },
+  { method: 'POST', path: '/create_account', config: Controllers.actions.create_account },
 
   // login
   { method: 'GET', path: '/login', config: Controllers.pages.login },

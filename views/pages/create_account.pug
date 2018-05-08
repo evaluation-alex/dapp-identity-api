@@ -13,15 +13,19 @@ block content
       input(type='hidden' name='crumb' value=crumb)
       input(type='hidden' name='token' value=token)
       fieldset
-        legend Token validated. Please set a name and password to create your account.
-        .form-element
-          label(for='name') Name
-          input(type='text' id='name' class='form-input' name='name' required)
-          - if (errors && errors.name)
-            .message.message-error #{errors.name}
-          label(for='password') Password
-          input(type='password' id='password' class='form-input' name='password' required pattern='{8, }' title='Must be at least 8 characters')
-          - if (errors && errors.password)
-            .message.message-error #{errors.password}
-        .form-element
-          button(type='submit' class='button button-primary') Create Account
+        - if (errors && errors.token)
+          .message.message-error #{errors.name}
+            legend There was a problem validating this token, please #[a(href='/signup') request a new one]
+        - else
+          legend Token validated. Please set a name and password to create your account.
+          .form-element
+            label(for='name') Name
+            input(type='text' id='name' class='form-input' name='name' required)
+            - if (errors && errors.name)
+              .message.message-error #{errors.name}
+            label(for='password') Password
+            input(type='password' id='password' class='form-input' name='password' required pattern='{8, }' title='Must be at least 8 characters')
+            - if (errors && errors.password)
+              .message.message-error #{errors.password}
+          .form-element
+            button(type='submit' class='button button-primary') Create Account
