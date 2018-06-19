@@ -6,6 +6,7 @@
 const Joi = require('joi');
 const Config = require('getconfig');
 const Boom = require('boom');
+const PeerIdentity = require('peer-identity');
 
 const Crypto = require('../lib/crypto');
 
@@ -55,6 +56,17 @@ module.exports = {
     auth: false
   },
 
+  jwk: {
+    description: 'Get the public key for this server',
+    notes: 'This is the public portion of they key it will use to sign sessions',
+    handler: async function (request, h) {
+
+      const publicKey = await Crypto.exportPublicJWK(this.keyPair);
+      return publicKey;
+    },
+    auth: false
+  },
+
   sign: {
     description: 'Begin the proof signing process',
     notes: 'Returns a form prompting the user for their password',
@@ -68,6 +80,30 @@ module.exports = {
     validate: {
       query: {
         proof: Joi.string().description('Session proof to sign').required()
+      }
+    }
+  },
+
+  sign2: {
+    description: 'Begin the proof signing process',
+    notes: 'Returns a form prompting the user for their password',
+    handler: async function (request, h) {
+
+      const user = request.auth.credentials;
+      const { proof, next } = request.query;
+      const identity = new PeerIdentity();
+      identity.setSessionKeyPair(this.keyPair);
+      //await Crypto.validateProof(request, proof);
+      const valid = await identity.importProof(proof);
+      if (!valid) {
+        throw Boom.badRequest('Invalid signature');
+      }
+      return h.view('pages/sign', { proof, user, next });
+    },
+    validate: {
+      query: {
+        proof: Joi.string().description('Session proof to sign').required(),
+        next: Joi.any().optional()
       }
     }
   },
@@ -101,6 +137,7 @@ module.exports = {
     tags: ['api'],
     handler: async function (request, h) {
 
+      console.log('there is a proof');
       const proof = await this.db.signatures.findOne(request.params);
       if (!proof) {
         throw Boom.notFound();
