@@ -19,12 +19,16 @@ module.exports = [
 
   // api
   { method: 'GET', path: '/key', config: Controllers.pages.key },
+  { method: 'GET', path: '/jwk', config: Controllers.pages.jwk },
   { method: 'GET', path: '/user', config: Controllers.pages.user },
   { method: 'GET', path: '/proof/{user_id}/{session_id}', config: Controllers.pages.proof },
+  { method: 'GET', path: '/proof2/{session_id}', config: Controllers.pages.proof2 },
 
   // authenticated routes
   { method: 'GET', path: '/sign', config: Controllers.pages.sign },
   { method: 'POST', path: '/sign', config: Controllers.actions.sign },
+  { method: 'GET', path: '/sign2', config: Controllers.pages.sign2 },
+  { method: 'POST', path: '/sign2', config: Controllers.actions.sign2 },
 
   // static assets
   { method: 'GET', path: '/{path*}', config: { handler: { directory: { path: './public', listing: false } }, auth: false } }
