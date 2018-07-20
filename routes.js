@@ -17,6 +17,7 @@ module.exports = [
   { method: 'GET', path: '/jwk', config: Controllers.pages.jwk },
   { method: 'GET', path: '/user', config: Controllers.pages.user },
   { method: 'GET', path: '/proof/{user_id}/{session_id}', config: Controllers.pages.proof },
+  { method: 'GET', path: '/proof2/{session_id}', config: Controllers.pages.proof2 },
 
   // authenticated routes
   { method: 'GET', path: '/sign', config: Controllers.pages.sign },

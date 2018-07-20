@@ -137,7 +137,6 @@ module.exports = {
     tags: ['api'],
     handler: async function (request, h) {
 
-      console.log('there is a proof');
       const proof = await this.db.signatures.findOne(request.params);
       if (!proof) {
         throw Boom.notFound();
@@ -147,6 +146,25 @@ module.exports = {
     validate: {
       params: {
         user_id: Joi.string().guid().description('User id'),
+        session_id: Joi.string().required().description('Session id')
+      }
+    },
+    auth: false
+  },
+
+  proof2: {
+    description: 'Look up proof signature by user session',
+    tags: ['api'],
+    handler: async function (request, h) {
+
+      const proof = await this.db.signatures.findOne(request.params);
+      if (!proof) {
+        throw Boom.notFound();
+      }
+      return proof;
+    },
+    validate: {
+      params: {
         session_id: Joi.string().required().description('Session id')
       }
     },

@@ -37,6 +37,7 @@
     "knex": "^0.14.6",
     "muckraker": "^4.0.1",
     "node-webcrypto-ossl": "^1.0.37",
+    "peer-identity": "^1.0.1",
     "pino-noir": "^2.2.1",
     "pug": "^2.0.3",
     "stylus": "^0.54.5",
